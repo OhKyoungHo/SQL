@@ -216,8 +216,61 @@ SELECT * FROM EMP;
 
 DELETE FROM DEPT WHERE DEPTID = 10003;  --부서 번호만 null로 바뀜
 
+---------------------------------------------
+--1. 사원번호, 이름, 업무, 급여,  현재 급여에 15% 증가된 급여를(New Salary),  증가액(Increase)를 출력
 
+SELECT empno, ename, job, sal, sal*1.15 as new_Salary, sal*0.15 as Increase
+FROM  emp;
 
+--2. 이름, 입사일, 입사일로부터 6개월 후에 돌아오는 월요일을 출력
+SELECT ename, hiredate,  NEXT_DAY(hiredate +180,'월요일') as new_monday
+FROM emp;
 
+--3.이름, 입사일, 입사일로부터 현재까지의  년수, 급여, 입사일로부터 현재까지의 급여의 총계를 출력
+SELECT ename, hiredate,  trunc((sysdate -hiredate)/365,0) as work_YEAR, sal, sal* trunc((sysdate -hiredate)/30,0) as sum_sal
+FROM emp;
+
+select ename, hiredate, sal,
+to_char(sysdate,'YYYY')-to_char(hiredate,'YYYY') as workyear,
+sal*(to_char(sysdate,'YYYY')-to_char(hiredate,'YYYY')) as sumsal
+from emp;
+
+--4.이름, 업무, 입사일, 입사한 요일을 출력
+SELECT ename,job, hiredate, to_char(hiredate,'day') as hiredate_day
+FROM emp;
+
+--5. 업무별, 부서별 급여 합계와 인원수를 출력하되, 10번 부서를 제외하고 업무가 ‘SALESMAN’과 ‘MANAGER’만 출력한다.
+SELECT job, deptno, sum(sal) as SUM, count(*)
+FROM  emp
+WHERE deptno!=10 AND (job = 'SALESMAN' OR job = 'MANAGER')
+GROUP BY job, deptno;
+
+--6. 업무별로 평균급여와 최대급여를 출력하되, 평균급여가 2000이상인 것만 출력하고 평균급여가 높은 순으로 정렬
+SELECT job, max(sal) as MAX, min(sal) as MIN  
+FROM  emp
+HAVING ceil(AVG(SAL))>=2000
+GROUP BY JOB
+ORDER BY AVG(SAL) DESC;
+
+--7. 같은 입사년도 별로 인원수를 출력
+SELECT TO_CHAR(hiredate, 'YYYY') AS HIREDATE_YEAR,COUNT(*)
+FROM  emp
+GROUP BY  TO_CHAR(hiredate, 'YYYY');
+
+--8. 5개씩 급여합계와 인원수를 출력 (rownum이용)
+SELECT CEIL(rownum/5),COUNT(*),  sum(sal) as SUM
+from emp 
+GROUP BY CEIL(rownum/5);
+
+--9. 다음과 같이 출력( 실제 출력된 인원수가 다를 수도 있음 )
+SELECT  COUNT(decode( JOB, 'CLERK', 4)) AS CLERK, COUNT(decode( JOB, 'SALESMAN', 4)) AS SALESMAN,
+COUNT(decode( JOB, 'MANAGER', 3)) AS MANAGER 
+FROM emp;
+
+--10. 다음과 같이 업무별, 부서별 출력 ( 실제 계산된 금액이 다를 수도 있음 )
+SELECT   job, nvl(sum(decode(deptno,'10',sal)),0) "10번부서", nvl(sum(decode(deptno,'20',sal)),0) "20번부서",
+nvl(sum(decode(deptno,'30',sal)),0) "30번부서", sum(sal) as 급여합계
+FROM emp
+GROUP BY job;
 
 
