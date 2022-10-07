@@ -5,6 +5,7 @@ name varchar2(20), -- 이름
 tel varchar2(20), -- 전화번호
 addr varchar2(100) -- 주소
 );
+--id를 기조
 ALTER TABLE ex_member ADD CONSTRAINT pk_ex_member_id primary key(id);
 
 create table ex_good(

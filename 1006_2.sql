@@ -45,3 +45,12 @@ when matched then
 update set ec.sal = nvl(ec.sal*1.1,0)
 when not matched then
 insert(ec.empno, ec.deptno,ec.sal)values(e.empno, e.deptno, e.sal);
+
+SELECT e.empno, e.ename, e.sal, d.dname, d.loc 
+FROM emp e, dept d 
+WHERE e.deptno =d.deptno and e.deptno =20; 
+
+
+
+
+
