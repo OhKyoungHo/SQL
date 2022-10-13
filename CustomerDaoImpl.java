@@ -18,7 +18,8 @@ public class CustomerDaoImpl implements CustomerDao{
 	 	// 1. 드라이버로딩
 		Class.forName(DRIVER);
 		System.out.println("드라이버로딩 성공");
-	}
+	}//end of CustomerDaoImpl
+	
 	/* 함수명 : insertCustomer
 	 * 인자 : CustomerVO
 	 * 리턴값 : void
@@ -48,8 +49,8 @@ public class CustomerDaoImpl implements CustomerDao{
 			ps.close();
 			con.close();
 		}
-
 	}//end of insertCustomer
+	
 	/*
 	 * 메소드명 : selectByTel
 	 * 인자 : 검색할 전화번호
@@ -58,6 +59,7 @@ public class CustomerDaoImpl implements CustomerDao{
 	 */
 	
 	public CustomerVO selectByTel(String tel) throws Exception{
+		//저장할 객체 생성
 		CustomerVO dao = new CustomerVO();
 		//2. 연결객체얻어오기
 		Connection con=null;
@@ -77,7 +79,7 @@ public class CustomerDaoImpl implements CustomerDao{
 			dao.setCustAddr(rs.getString("CUSTADDR"));
 			dao.setCustEmail(rs.getString("CUSTEMAIL"));
 		}
-		return dao;
+		return dao;// dao에 저장한 내용들을 리턴
 	}//end of selectByTel
 	
 	/*
@@ -87,6 +89,7 @@ public class CustomerDaoImpl implements CustomerDao{
 	 * 역할 : 사용자가 입력한 이름을 받아서 해당하는 고객정보를 리턴
 	 */
 	public CustomerVO selectByName(String CustName) throws Exception{
+		//내용 저장할 객체 생성
 		CustomerVO dao = new CustomerVO();
 		//2. 연결객체얻어오기
 		Connection con=null;
@@ -97,6 +100,7 @@ public class CustomerDaoImpl implements CustomerDao{
 		String sql ="SELECT *FROM CUSTOMER WHERE CUSTNAME=?";
 		//4. 전송객체 얻어오기
 		ps = con.prepareStatement(sql);
+		//5.값 세팅
 		ps.setString(1, CustName);
 		ResultSet rs = ps.executeQuery();
 		if(rs.next()) {
@@ -106,7 +110,7 @@ public class CustomerDaoImpl implements CustomerDao{
 			dao.setCustAddr(rs.getString("CUSTADDR"));
 			dao.setCustEmail(rs.getString("CUSTEMAIL"));
 		}
-		return dao;
+		return dao;//dao에 저장한 내용들을 리턴
 	}//end of selectByName
 	/*
 	 * 메소드명 : updateCustomer
@@ -133,6 +137,7 @@ public class CustomerDaoImpl implements CustomerDao{
 		ps.setString(3, vo.getCustAddr());
 		ps.setString(4, vo.getCustEmail());
 		ps.setString(5, vo.getCustTel1());
+		//5. 전송
 		ps.executeUpdate();
 		
 	}finally {
